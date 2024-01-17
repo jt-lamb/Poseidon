@@ -1,3 +1,5 @@
+//Copyright 2024 John Thomas Lamb
+
 float dt;
 float prevTime;
 Player player;
