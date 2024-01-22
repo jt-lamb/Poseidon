@@ -22,7 +22,7 @@ class RadialObject {
     float dx = other.position.x - position.x;
     float dy = other.position.y - position.y;
     float dis = sqrt(dx * dx + dy * dy);
-    if(dis <= radius + other.radius) return false;
+    if(dis <= radius + other.radius) return true;
     return false;
   }
 }

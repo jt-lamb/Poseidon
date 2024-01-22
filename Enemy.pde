@@ -10,7 +10,7 @@ class Enemy extends RadialObject {
 
   void update() {
     
-    position.y += 20;
+    position.y += 20 * dt;
     position.x += velocity.x * dt;
     position.y += velocity.y * dt;
     

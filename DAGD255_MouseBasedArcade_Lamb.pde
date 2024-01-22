@@ -7,6 +7,7 @@ Player player;
 ArrayList<Enemy> enemies = new ArrayList();
 float enemySpawnCD = 2;
 
+float gameTime;
 
 void setup() {
   size(1280, 720);
@@ -17,6 +18,10 @@ void draw() { // This function is called every frame
   //CALCULATE DELTA TIME AND DRAW BACKGROUND UNDER THIS LINE...
   calcDeltaTime();
   background(220, 150, 150);
+  
+  gameTime += dt;
+  int gTime = floor(gameTime);
+  
   // SPAWN OBJECTS UNDER THIS LINE...
 
   enemySpawnCD -= dt;
@@ -30,6 +35,10 @@ void draw() { // This function is called every frame
   for (int i = 0; i < enemies.size(); i++) {
     Enemy e = enemies.get(i);
     e.update();
+    
+    if(e.checkCollision(player)) {
+      e.isDead = true;
+    }
     
     if(e.isDead) enemies.remove(i);
   }
@@ -46,10 +55,12 @@ void draw() { // This function is called every frame
   }
 
 
-
   player.draw();
-
-
+  
+  
+  textSize(20);
+  text ("Game Time: " + gTime, width/2, 50);
+  
   // PREP FOR NEXT FRAME UNDER THIS LINE...
 }
 
