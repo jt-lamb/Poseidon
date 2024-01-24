@@ -1,13 +1,24 @@
-//Copyright 2024 John Thomas Lamb
+// This program plays a mouse-based arcade game.
+// Copyright 2024 John Thomas Lamb
+// [Rules and controls go here]
+// LEFT CLICK -
+// RIGHT CLICK -
+// MIDDLE MOUSE -
+
+
 
 float dt;
 float prevTime;
 Player player;
 
+ArrayList<Rocket> rockets = new ArrayList();
 ArrayList<Enemy> enemies = new ArrayList();
 float enemySpawnCD = 2;
 
-float gameTime;
+float gameTime = 0;
+
+boolean leftPressed, pLeftPressed;
+boolean rightPressed, pRightPressed;
 
 void setup() {
   size(1280, 720);
@@ -18,10 +29,10 @@ void draw() { // This function is called every frame
   //CALCULATE DELTA TIME AND DRAW BACKGROUND UNDER THIS LINE...
   calcDeltaTime();
   background(220, 150, 150);
-  
+
   gameTime += dt;
   int gTime = floor(gameTime);
-  
+
   // SPAWN OBJECTS UNDER THIS LINE...
 
   enemySpawnCD -= dt;
@@ -35,12 +46,19 @@ void draw() { // This function is called every frame
   for (int i = 0; i < enemies.size(); i++) {
     Enemy e = enemies.get(i);
     e.update();
-    
-    if(e.checkCollision(player)) {
+
+    if (e.checkCollision(player)) {
       e.isDead = true;
     }
-    
-    if(e.isDead) enemies.remove(i);
+
+    if (e.isDead) enemies.remove(i);
+  }
+
+  for (int i = 0; i < rockets.size(); i++) {
+    Rocket r = rockets.get(i);
+    r.update();
+
+    if (r.isDead) rockets.remove(r);
   }
 
 
@@ -53,17 +71,31 @@ void draw() { // This function is called every frame
     Enemy e = enemies.get(i);
     e.draw();
   }
-
+  for (int i = 0; i < rockets.size(); i++) {
+    Rocket r = rockets.get(i);
+    r.draw();
+  }
 
   player.draw();
-  
-  
+
+
   textSize(20);
   text ("Game Time: " + gTime, width/2, 50);
-  
+
   // PREP FOR NEXT FRAME UNDER THIS LINE...
+  pLeftPressed = leftPressed;
+  pRightPressed = rightPressed;
 }
 
+void mousePressed() {
+  if (mouseButton == LEFT) leftPressed = true;
+  if (mouseButton == RIGHT) rightPressed = true;
+}
+
+void mouseReleased() {
+  if (mouseButton == LEFT) leftPressed = false;
+  if (mouseButton == RIGHT) rightPressed = false;
+}
 
 void calcDeltaTime() {
   float currentTime = millis();

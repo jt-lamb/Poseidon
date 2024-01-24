@@ -4,6 +4,7 @@ class RadialObject {
   PVector velocity;
   float radius;
   boolean isDead;
+  float angle;
 
 
   RadialObject() {
@@ -25,4 +26,18 @@ class RadialObject {
     if(dis <= radius + other.radius) return true;
     return false;
   }
+  
+  void calcAngle(RadialObject other) {
+    float dx = other.position.x - position.x;
+    float dy = other.position.y - position.y;
+    angle = atan2(dy, dx);
+    
+  }
+  
+  void calcAngle(float x, float y) {
+    float dx = x - position.x;
+    float dy = y - position.y;
+    angle = atan2(dy, dx);
+  }
+  
 }
