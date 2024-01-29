@@ -15,6 +15,7 @@ class Rocket extends RadialObject {
     position.y += velocity.y * sin(angle) * dt;
     
     if(position.x > width + radius || position.x < - radius || position.y > height + radius || position.y < -radius) isDead = true;
+    
   }
 
   void draw() {

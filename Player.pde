@@ -11,12 +11,12 @@ class Player extends RadialObject {
 
   void update() {
     
-    easing = leftPressed ? 1 : 0.1;
+    easing = rightPressed ? 1 : 0.1;
     
     if (leftPressed && !pLeftPressed) {
       calcAngle(mouseX, mouseY);
       Rocket r = new Rocket(position.x, position.y, angle);
-      rockets.add(r);
+      scenePlay.rockets.add(r);
     }
     
     //Position

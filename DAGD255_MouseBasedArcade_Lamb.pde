@@ -5,87 +5,53 @@
 // RIGHT CLICK -
 // MIDDLE MOUSE -
 
+// create a variable to hold each scene:
+SceneTitle sceneTitle;
+ScenePlay scenePlay;
+SceneGameOver sceneGameOver;
 
 
 float dt;
 float prevTime;
 Player player;
 
-ArrayList<Rocket> rockets = new ArrayList();
-ArrayList<Enemy> enemies = new ArrayList();
-float enemySpawnCD = 2;
 
-float gameTime = 0;
+void setup() {
+  size(1280, 720);
+  switchToTitle();
+}
+
 
 boolean leftPressed, pLeftPressed;
 boolean rightPressed, pRightPressed;
 
-void setup() {
-  size(1280, 720);
-  player = new Player();
-}
+
 
 void draw() { // This function is called every frame
-  //CALCULATE DELTA TIME AND DRAW BACKGROUND UNDER THIS LINE...
+
+  // CALCULATE DELTA TIME AND DRAW BACKGROUND UNDER THIS LINE...
   calcDeltaTime();
   background(220, 150, 150);
 
-  gameTime += dt;
-  int gTime = floor(gameTime);
+  // UPDATE AND DRAW ANY ACTIVE SCENES:
 
-  // SPAWN OBJECTS UNDER THIS LINE...
-
-  enemySpawnCD -= dt;
-  if (enemySpawnCD <= 0) {
-    Enemy e = new Enemy();
-    enemies.add(e);
-    enemySpawnCD = random(0.5, 1);
+  if (sceneTitle != null) {
+    sceneTitle.update();
+    if (sceneTitle != null) sceneTitle.draw(); // this extra if statement exists because the sceneTitle.update() might result in the scene switching...
+  } else if (scenePlay != null) {
+    scenePlay.update();
+    if (scenePlay != null) scenePlay.draw(); // this extra if statement exists because the scenePlay.update() might result in the scene switching...
+  } else if (sceneGameOver != null) {
+    sceneGameOver.update();
+    if (sceneGameOver != null) sceneGameOver.draw(); // this extra if statement exists because the sceneGameOver.update() might result in the scene switching...
   }
-
-  // UPDATE ALL OBJECTS UNDER THIS LINE...
-  for (int i = 0; i < enemies.size(); i++) {
-    Enemy e = enemies.get(i);
-    e.update();
-
-    if (e.checkCollision(player)) {
-      e.isDead = true;
-    }
-
-    if (e.isDead) enemies.remove(i);
-  }
-
-  for (int i = 0; i < rockets.size(); i++) {
-    Rocket r = rockets.get(i);
-    r.update();
-
-    if (r.isDead) rockets.remove(r);
-  }
-
-
-
-  player.update();
-
-
-  // DRAW ALL OBJECTS UNDER THIS LINE...
-  for (int i = 0; i < enemies.size(); i++) {
-    Enemy e = enemies.get(i);
-    e.draw();
-  }
-  for (int i = 0; i < rockets.size(); i++) {
-    Rocket r = rockets.get(i);
-    r.draw();
-  }
-
-  player.draw();
-
-
-  textSize(20);
-  text ("Game Time: " + gTime, width/2, 50);
-
   // PREP FOR NEXT FRAME UNDER THIS LINE...
   pLeftPressed = leftPressed;
   pRightPressed = rightPressed;
 }
+
+
+
 
 void mousePressed() {
   if (mouseButton == LEFT) leftPressed = true;
@@ -101,4 +67,19 @@ void calcDeltaTime() {
   float currentTime = millis();
   dt = (currentTime  - prevTime) / 1000.0;
   prevTime = currentTime;
+}
+void switchToTitle() {
+  sceneTitle = new SceneTitle();
+  scenePlay = null;
+  sceneGameOver = null;
+}
+void switchToPlay() {
+  scenePlay = new ScenePlay();
+  sceneTitle = null;
+  sceneGameOver = null;
+}
+void switchToGameOver() {
+  sceneGameOver = new SceneGameOver();
+  scenePlay = null;
+  sceneTitle = null;
 }
