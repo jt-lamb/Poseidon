@@ -9,6 +9,8 @@ class Particle {
   float rotateSpeed;
   float lifeTime;
   float size;
+  float friction = 1;
+  float fade = 1;
 
   float r, g, b;
   float alpha;
@@ -19,7 +21,7 @@ class Particle {
     position = new PVector(x, y);
     velocity = new PVector(random(-150, 150), -300);
 
-    angle = PI/2;
+    angle = radians(random(240, 300));
     rotateAngle = radians(random(359));
     lifeTime = random(0.5, 1.5);
     alpha = random(128, 255);
@@ -33,9 +35,12 @@ class Particle {
     lifeTime -= dt;
     if (lifeTime <= 0) isDead = true;
 
-    alpha -= 128 * dt;
+    alpha -= 128 * dt * fade;
     
     rotateAngle += rotateSpeed * dt;
+    
+    velocity.x *= friction;
+    velocity.y *= friction;
     
     position.x += velocity.x * cos(angle) * dt;
     position.y += velocity.y * sin(angle) * dt;

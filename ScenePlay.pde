@@ -29,9 +29,6 @@ class ScenePlay {
       enemySpawnCD = random(0.5, 1);
     }
 
-    Particle p = new Particle(player.position.x, player.position.y);
-    particles.add(p);
-
     // UPDATE ALL OBJECTS UNDER THIS LINE...
 
 
@@ -40,7 +37,7 @@ class ScenePlay {
       e.update();
 
       if (e.checkCollision(player)) {
-        e.isDead = true;
+        switchToGameOver();
       }
 
       if (e.isDead) enemies.remove(i);
@@ -55,6 +52,40 @@ class ScenePlay {
         if (r.checkCollision(enemies.get(j))) {
           r.isDead = true;
           enemies.get(j).isDead = true;
+
+          int numParticles = (int)random(25, 50);
+          for (int k = 0; k < numParticles; k++) {
+            Particle p = new Particle(r.position.x, r.position.y);
+            p.angle = radians(random(359));
+            p.velocity = new PVector(random(300, 500), random(300, 500));
+            p.friction = .95;
+            p.r = random(245, 255);
+            p.g = random(115, 240);
+            particles.add(p);
+          }
+          int numSmokeParticles = (int)random(25, 50);
+          for (int k = 0; k < numSmokeParticles; k++) {
+            Particle p = new Particle(r.position.x, r.position.y);
+            p.angle = radians(random(359));
+            p.velocity = new PVector(random(300, 500), random(300, 500));
+            p.friction = .98;
+            p.lifeTime = 4;
+            p.fade = .8;
+            particles.add(p);
+          }
+          int numShockwaveParticles = (int)random(100, 200);
+          for (int k = 0; k < numShockwaveParticles; k++) {
+            Particle p = new Particle(r.position.x, r.position.y);
+            p.angle = radians(random(359));
+            p.velocity = new PVector(1200, 1200);
+            p.friction = 1;
+            p.r = 255;
+            p.g = 255;
+            p.b = 255;
+            p.lifeTime = 3;
+            p.fade = 2;
+            particles.add(p);
+          }
         }
       }
 
