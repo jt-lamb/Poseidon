@@ -37,7 +37,8 @@ class ScenePlay {
       e.update();
 
       if (e.checkCollision(player)) {
-        switchToGameOver();
+        //switchToGameOver();
+        e.canMove = false;
       }
 
       if (e.isDead) enemies.remove(i);
