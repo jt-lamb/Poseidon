@@ -19,7 +19,7 @@ class Particle {
 
   Particle(float x, float y) {
     position = new PVector(x, y);
-    velocity = new PVector(random(-150, 150), -300);
+    velocity = new PVector(random(-150, 150), random(-150, 150));
 
     angle = radians(random(240, 300));
     rotateAngle = radians(random(359));

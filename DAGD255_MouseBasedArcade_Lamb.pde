@@ -31,7 +31,7 @@ void draw() { // This function is called every frame
 
   // CALCULATE DELTA TIME AND DRAW BACKGROUND UNDER THIS LINE...
   calcDeltaTime();
-  background(220, 150, 150);
+  background(#02A0CE);
 
   // UPDATE AND DRAW ANY ACTIVE SCENES:
 

@@ -1,6 +1,7 @@
 class Enemy extends RadialObject {
   
   boolean canMove = true;
+  float deathTimer = 2;
 
   Enemy() {
     position = new PVector(random(width), -50);
@@ -18,7 +19,11 @@ class Enemy extends RadialObject {
       position.x += velocity.x * dt;
       position.y += velocity.y * dt;
     } else {
-      //death timer here
+      //Death Timer
+      deathTimer -= dt;
+      
+      
+      if (deathTimer < 0) isDead = true;
     }
 
 

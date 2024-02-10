@@ -1,15 +1,17 @@
 class Player extends RadialObject {
-
   float easing = 5;
-  PVector poseidonLocation = new PVector();
 
-  
+
   //Status
   boolean canMove = true;
+  boolean energyCooldownOn = false;
   boolean isAttacking = false;
+  boolean canAttack;
   float attackCounter = 1;
   int maxEnergy = 100;
-  int energy = maxEnergy;
+  float energy = maxEnergy;
+  float energyCooldown = 3;
+  float energyRegenCounter = 3;
 
   //Buffs
   boolean doubleRadius = false;
@@ -33,41 +35,40 @@ class Player extends RadialObject {
 
   void update() {
 
-    easing = rightPressed ? 3 : 0.5;
+
+    //easing = rightPressed ? 3 : 0.5;
+
+    if (rightPressed == true) {
+      if (energy > 0) {
+        energyRegenCounter = 3;
+        easing = 3;
+        energy -= 30 * dt;
+      } else {
+        easing = .5;
+        energyCooldownOn = true;
+      }
+    } else {
+      if (energyRegenCounter > 0) energyRegenCounter -= dt;
+      else if (energy < 100) energy += 20 * dt;
+      easing = .5;
+    }
+    energy = constrain(energy, 0, 100);
 
 
     if (leftPressed && !pLeftPressed) {
-      canMove = false;
-      isAttacking = true;
-
-      //calcAngle(mouseX, mouseY);
-      //Rocket r = new Rocket(position.x, position.y, angle);
-      //scenePlay.rockets.add(r);
-    }
-
-    if (isAttacking) {
-      attackCounter -= dt;
-      if (attackCounter <= 0) {
-        if (radius == 20) radius = 50;
-        else {
-          radius = 20;
-          isAttacking = false;
-          canMove = true;
-        }
-        attackCounter = 1;
-      }
+      
+      calcAngle(mouseX, mouseY);
+      Whirlpool w = new Whirlpool(position.x + cos(angle) * 100, position.y + sin(angle) * 100);
+      scenePlay.whirlpools.add(w);
     }
 
 
     //Position
     float dx = mouseX - position.x;
     float dy = mouseY - position.y;
-    if (canMove) {
-      position.x += dx * easing * dt;
-      position.y += dy * easing * dt;
-    }
-    poseidonLocation.x = position.x - cos(angle) * 100;
-    poseidonLocation.y = position.y - sin(angle) * 100;
+
+    position.x += dx * easing * dt;
+    position.y += dy * easing * dt;
   }
 
   void draw() {
@@ -75,7 +76,5 @@ class Player extends RadialObject {
     noStroke();
     ellipse(position.x, position.y, radius*2, radius*2);
     fill(#25D8B9);
-    calcAngle(mouseX, mouseY);
-    ellipse(poseidonLocation.x, poseidonLocation.y, 10, 10);
   }
 }

@@ -3,6 +3,7 @@ class ScenePlay {
 
   Player player;
 
+  ArrayList<Whirlpool> whirlpools = new ArrayList();
   ArrayList<Rocket> rockets = new ArrayList();
   ArrayList<Enemy> enemies = new ArrayList();
   ArrayList<Particle> particles = new ArrayList();
@@ -30,15 +31,13 @@ class ScenePlay {
     }
 
     // UPDATE ALL OBJECTS UNDER THIS LINE...
-
-
     for (int i = 0; i < enemies.size(); i++) {
       Enemy e = enemies.get(i);
       e.update();
 
       if (e.checkCollision(player)) {
         //switchToGameOver();
-        e.canMove = false;
+        e.isDead = true;
       }
 
       if (e.isDead) enemies.remove(i);
@@ -92,6 +91,16 @@ class ScenePlay {
 
       if (r.isDead) rockets.remove(r);
     }
+    for (int i = 0; i < whirlpools.size(); i++) {
+      Whirlpool w = whirlpools.get(i);
+      w.update();
+      if (w.isDead) whirlpools.remove(i);
+
+      for (int j = 0; j < enemies.size(); j++) {
+        Enemy e = enemies.get(j);
+        if (w.checkCollision(e)) e.canMove = false;
+      }
+    }
     for (int i = 0; i < particles.size(); i++) {
       Particle pa = particles.get(i);
       pa.update();
@@ -105,6 +114,10 @@ class ScenePlay {
 
   void draw() {
     // DRAW ALL OBJECTS UNDER THIS LINE...
+    for (int i = 0; i < whirlpools.size(); i++) {
+      Whirlpool w = whirlpools.get(i);
+      w.draw();
+    }
     for (int i = 0; i < enemies.size(); i++) {
       Enemy e = enemies.get(i);
       e.draw();
@@ -120,8 +133,9 @@ class ScenePlay {
 
     player.draw();
 
-
+    //DRAW ALL HUD ELEMENTS UNDER THIS LINE...
     textSize(20);
-    text ("Game Time: " + gTime, width/2, 50);
+    text("Stamina: " + ceil(player.energy), 100, 50);
+    text("Game Time: " + gTime, width/2, 50);
   }
 }
