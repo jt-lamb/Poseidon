@@ -21,7 +21,8 @@ class Enemy extends RadialObject {
     } else {
       //Death Timer
       deathTimer -= dt;
-      
+      radius -= dt * 5;
+      radius = constrain(radius, 0, 100);
       
       if (deathTimer < 0) isDead = true;
     }

@@ -1,6 +1,6 @@
 class Whirlpool extends RadialObject {
   float particleCooldown = .1;
-  PImage[] animation = new PImage [11];
+  PImage[] animation = new PImage [12];
   float animCounter;
   int animIndex;
   
@@ -16,7 +16,7 @@ class Whirlpool extends RadialObject {
     //Cycle through Animation
     if (!isDead) {
       animCounter++;
-      if (animCounter >= 6) {
+      if (animCounter >= 20) {
         animIndex++;
         if (animIndex >= animation.length) isDead = true;
         animCounter = 0;
@@ -47,7 +47,7 @@ class Whirlpool extends RadialObject {
 
   void draw() {
     
-    ellipse(position.x, position.y, radius * 2, radius * 2);
+    //ellipse(position.x, position.y, radius * 2, radius * 2);
     image(animation[animIndex], position.x - animation[animIndex].width/2, position.y - animation[animIndex].height/2);
   }
 }
