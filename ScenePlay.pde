@@ -2,15 +2,22 @@
 class ScenePlay {
 
   Player player;
+  ChestGUI chestGUI;
 
+  //Collections
   ArrayList<Whirlpool> whirlpools = new ArrayList();
   ArrayList<Rocket> rockets = new ArrayList();
   ArrayList<Enemy> enemies = new ArrayList();
   ArrayList<Particle> particles = new ArrayList();
+  ArrayList<PowerUp> powerUps = new ArrayList();
+  ArrayList<Bomb> bombs = new ArrayList();
+  ArrayList<Harpoon> harpoons = new ArrayList();
   float enemySpawnCD = 2;
 
   float gameTime = 0;
   int gTime = 0;
+
+
 
   ScenePlay() {
     player = new Player();
@@ -21,9 +28,17 @@ class ScenePlay {
     gTime = floor(gameTime);
 
     // SPAWN OBJECTS UNDER THIS LINE...
+    if (player.gold > 0 && chestGUI == null) {
+      chestGUI = new ChestGUI();
+      println("spawn gui");
+      player.canMove = false;
+    }
 
 
-    enemySpawnCD -= dt;
+
+
+
+    if (player.canMove) enemySpawnCD -= dt;
     if (enemySpawnCD <= 0) {
       Enemy e = new Enemy();
       enemies.add(e);
@@ -31,18 +46,64 @@ class ScenePlay {
     }
 
     // UPDATE ALL OBJECTS UNDER THIS LINE...
+    if (chestGUI != null) {
+
+      chestGUI.update();
+
+      if (chestGUI.completed == true) {
+        println("gold--");
+        chestGUI = null;
+        player.gold--;
+        player.canMove = true;
+      }
+    }
     for (int i = 0; i < enemies.size(); i++) {
       Enemy e = enemies.get(i);
       e.update();
-
       if (e.checkCollision(player)) {
-        //switchToGameOver();
+        player.health -= 5;
         e.isDead = true;
       }
 
       if (e.isDead) enemies.remove(i);
     }
 
+    for (int i = 0; i < powerUps.size(); i++) {
+      PowerUp p = powerUps.get(i);
+      p.update();
+
+      if (p.checkCollision(player)) p.isDead = true;
+
+      if (p.isDead) {
+        p.effect();
+        powerUps.remove(i);
+      }
+    }
+
+    for (int i = 0; i < bombs.size(); i++) {
+      Bomb b = bombs.get(i);
+      b.update();
+
+      for (int j = 0; j < enemies.size(); j++) {
+        if (b.checkCollision(enemies.get(j))) {
+          b.isDetonated = true;
+          enemies.get(j).isDead = true;
+        }
+      }
+      if (b.isDead) bombs.remove(i);
+    }
+    for (int i = 0; i < harpoons.size(); i++) {
+      Harpoon h = harpoons.get(i);
+      h.update();
+
+      for (int j = 0; j < enemies.size(); j++) {
+        if (h.checkCollision(enemies.get(j))) {
+          h.isDead = true;
+          enemies.get(j).isDead = true;
+        }
+      }
+      if (h.isDead) harpoons.remove(i);
+    }
     for (int i = 0; i < rockets.size(); i++) {
       Rocket r = rockets.get(i);
       r.update();
@@ -98,7 +159,7 @@ class ScenePlay {
 
       for (int j = 0; j < enemies.size(); j++) {
         Enemy e = enemies.get(j);
-        if (w.checkCollision(e)) e.canMove = false;
+        if (w.checkCollision(e)) e.notDying = false;
       }
     }
     for (int i = 0; i < particles.size(); i++) {
@@ -110,6 +171,8 @@ class ScenePlay {
 
 
     player.update();
+    
+    
   }
 
   void draw() {
@@ -122,6 +185,18 @@ class ScenePlay {
       Enemy e = enemies.get(i);
       e.draw();
     }
+    for (int i = 0; i < powerUps.size(); i++) {
+      PowerUp p = powerUps.get(i);
+      p.draw();
+    }
+    for (int i = 0; i < bombs.size(); i++) {
+      Bomb b = bombs.get(i);
+      b.draw();
+    }
+    for (int i = 0; i < harpoons.size(); i++) {
+      Harpoon h = harpoons.get(i);
+      h.draw();
+    }
     for (int i = 0; i < rockets.size(); i++) {
       Rocket r = rockets.get(i);
       r.draw();
@@ -132,6 +207,7 @@ class ScenePlay {
     }
 
     player.draw();
+    if (chestGUI != null) chestGUI.draw();
 
     //DRAW ALL HUD ELEMENTS UNDER THIS LINE...
     textSize(20);
