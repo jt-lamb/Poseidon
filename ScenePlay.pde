@@ -12,20 +12,23 @@ class ScenePlay {
   ArrayList<PowerUp> powerUps = new ArrayList();
   ArrayList<Bomb> bombs = new ArrayList();
   ArrayList<Harpoon> harpoons = new ArrayList();
-  
+
   //Time
   float enemySpawnCD = 2;
   float enemySpawnRate = 1;
-  float spawnRateIncreaseCD = 60;
+  float spawnRateIncreaseCD = 30;
 
 
   float gameTime = 0;
   int gTime = 0;
 
+  //Olympus
+  float olympusHealth;
 
 
   ScenePlay() {
     player = new Player();
+    music.play();
   }
 
   void update() {
@@ -33,21 +36,32 @@ class ScenePlay {
     gTime = floor(gameTime);
 
     // SPAWN OBJECTS UNDER THIS LINE...
+
+    //Load Chest GUI when necessary
     if (player.gold > 0 && chestGUI == null) {
       chestGUI = new ChestGUI();
+      chest.play();
       println("spawn gui");
       player.canMove = false;
     }
 
 
-
-
-
+    //Spawn Enemy
     if (player.canMove) enemySpawnCD -= dt;
     if (enemySpawnCD <= 0) {
-      Enemy e = new Enemy();
-      enemies.add(e);
-      enemySpawnCD = random(1, 3);
+      if (random(20) < 3) {
+        Enemy e = new Submarine();
+        enemies.add(e);
+      } else {
+        Enemy e = new Enemy();
+        enemies.add(e);
+      }
+      enemySpawnCD = random(1/enemySpawnRate, 3/enemySpawnRate);
+    }
+    if (player.canMove) spawnRateIncreaseCD -= dt;
+    if (spawnRateIncreaseCD < 0) {
+      enemySpawnRate += .5;
+      spawnRateIncreaseCD = 30;
     }
 
     // UPDATE ALL OBJECTS UNDER THIS LINE...
@@ -114,47 +128,57 @@ class ScenePlay {
       Rocket r = rockets.get(i);
       r.update();
 
-      for (int j = 0; j < enemies.size(); j++) {
 
-        if (r.checkCollision(enemies.get(j))) {
-          r.isDead = true;
-          enemies.get(j).isDead = true;
 
-          int numParticles = (int)random(25, 50);
-          for (int k = 0; k < numParticles; k++) {
-            Particle p = new Particle(r.position.x, r.position.y);
-            p.angle = radians(random(359));
-            p.velocity = new PVector(random(300, 500), random(300, 500));
-            p.friction = .95;
-            p.r = random(245, 255);
-            p.g = random(115, 240);
-            particles.add(p);
-          }
-          int numSmokeParticles = (int)random(25, 50);
-          for (int k = 0; k < numSmokeParticles; k++) {
-            Particle p = new Particle(r.position.x, r.position.y);
-            p.angle = radians(random(359));
-            p.velocity = new PVector(random(300, 500), random(300, 500));
-            p.friction = .98;
-            p.lifeTime = 4;
-            p.fade = .8;
-            particles.add(p);
-          }
-          int numShockwaveParticles = (int)random(100, 200);
-          for (int k = 0; k < numShockwaveParticles; k++) {
-            Particle p = new Particle(r.position.x, r.position.y);
-            p.angle = radians(random(359));
-            p.velocity = new PVector(1200, 1200);
-            p.friction = 1;
-            p.r = 255;
-            p.g = 255;
-            p.b = 255;
-            p.lifeTime = 3;
-            p.fade = 2;
-            particles.add(p);
-          }
+      if (r.checkCollision(player)) {
+        r.isDead = true;
+        explosion.play();
+        player.health -= 20;
+
+        int numParticles = (int)random(45, 70);
+        for (int k = 0; k < numParticles; k++) {
+          Particle p = new Particle(r.position.x, r.position.y);
+          p.angle = radians(random(359));
+          p.velocity = new PVector(random(300, 500), random(300, 500));
+          p.friction = .95;
+          p.r = random(245, 255);
+          p.g = random(115, 240);
+          p.rotateAngle = 0;
+          p.rotateSpeed = 0;
+          p.size = 6;
+          particles.add(p);
+        }
+        int numSmokeParticles = (int)random(45, 70);
+        for (int k = 0; k < numSmokeParticles; k++) {
+          Particle p = new Particle(r.position.x, r.position.y);
+          p.angle = radians(random(359));
+          p.velocity = new PVector(random(300, 500), random(300, 500));
+          p.friction = .98;
+          p.lifeTime = 4;
+          p.fade = .8;
+          p.rotateAngle = 0;
+          p.rotateSpeed = 0;
+          p.size = 6;
+          particles.add(p);
+        }
+        int numShockwaveParticles = (int)random(120, 220);
+        for (int k = 0; k < numShockwaveParticles; k++) {
+          Particle p = new Particle(r.position.x, r.position.y);
+          p.angle = radians(random(359));
+          p.velocity = new PVector(1200, 1200);
+          p.friction = 1;
+          p.r = 255;
+          p.g = 255;
+          p.b = 255;
+          p.lifeTime = 3;
+          p.fade = 2;
+          p.rotateAngle = 0;
+          p.rotateSpeed = 0;
+          p.size = 6;
+          particles.add(p);
         }
       }
+
 
       if (r.isDead) rockets.remove(r);
     }

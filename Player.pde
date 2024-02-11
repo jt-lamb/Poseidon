@@ -52,6 +52,8 @@ class Player extends RadialObject {
   }
 
   void update() {
+
+    
     //easing = rightPressed ? 3 : 0.5;
 
     if (rightPressed == true && canMove) {
@@ -128,9 +130,16 @@ class Player extends RadialObject {
 
     }
 
+    //Max Health Check
+    if (health >= maxHealth) health = maxHealth;
+    
+
     //Set Bar Values
     healthBar.value = health;
     staminaBar.value = energy;
+    
+    
+    
   }
 
   void draw() {

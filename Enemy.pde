@@ -1,7 +1,7 @@
 class Enemy extends RadialObject {
 
   boolean notDying = true;
-  float deathTimer = 2;
+  float deathTimer = 1;
   int itemDrop;
   PowerUp item;
 
@@ -57,7 +57,11 @@ class Enemy extends RadialObject {
       if (deathTimer < 0) isDead = true;
     }
 
-    if (position.y >= height + radius) isDead = true;
+    if (position.x >= width + radius) {
+      isDead = true;
+      scenePlay.olympusHealth--;
+      enemyPass.play();
+    }
 
     if (isDead == true) {
       //decide whether or not to spawn an item, and what type

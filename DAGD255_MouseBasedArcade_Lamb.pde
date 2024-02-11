@@ -5,6 +5,8 @@
 // RIGHT CLICK -
 // MIDDLE MOUSE -
 
+import processing.sound.*;
+
 // create a variable to hold each scene:
 SceneTitle sceneTitle;
 ScenePlay scenePlay;
@@ -15,10 +17,20 @@ float dt;
 float prevTime;
 Player player;
 
+SoundFile explosion;
+SoundFile music;
+SoundFile chest;
+SoundFile enemyPass;
 
 void setup() {
   size(1280, 720);
   switchToTitle();
+  
+  
+  explosion = new SoundFile(this, "explosion.wav");
+  music = new SoundFile(this, "aquarium.wav");
+  chest = new SoundFile(this, "chest.wav");
+  enemyPass = new SoundFile(this, "enemypass.wav");
 }
 
 
