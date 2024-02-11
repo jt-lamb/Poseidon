@@ -35,9 +35,9 @@ class Button {
     if (!hovered)fill (r, g, b);
     else fill(r+20, g+20, b+20);
     rect(position.x, position.y, size.x, size.y);
-    fill(255, 255, 255);
     textAlign(CENTER, CENTER);
     textSize(36);
+    fill(0);
     text(text, position.x + size.x/2, position.y+size.y/2);
   }
 }

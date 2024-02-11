@@ -3,6 +3,7 @@ class ScenePlay {
 
   Player player;
   ChestGUI chestGUI;
+  Bar olympusHealthBar;
 
   //Collections
   ArrayList<Whirlpool> whirlpools = new ArrayList();
@@ -23,15 +24,20 @@ class ScenePlay {
   int gTime = 0;
 
   //Olympus
-  float olympusHealth;
+  float olympusHealth = 50;
+
 
 
   ScenePlay() {
     player = new Player();
     music.play();
+    olympusHealthBar = new Bar(width/2, height/8 - 10, 0, 600, 30, 50, 200, 50, 50);
   }
 
   void update() {
+
+    olympusHealthBar.value = olympusHealth;
+
     gameTime += dt;
     gTime = floor(gameTime);
 
@@ -201,7 +207,7 @@ class ScenePlay {
 
 
     player.update();
-    if (player.health <=0) switchToGameOver();
+    if (player.health <=0 || olympusHealth <= 0) switchToGameOver();
   }
 
   void draw() {
@@ -237,11 +243,13 @@ class ScenePlay {
     }
 
     player.draw();
-    if (chestGUI != null) chestGUI.draw();
 
-    //DRAW ALL HUD ELEMENTS UNDER THIS LINE...
-    textSize(20);
-    text("Stamina: " + ceil(player.energy), 100, 50);
-    text("Game Time: " + gTime, width/2, 50);
+    //DRAW ALL HUD AND GUI ELEMENTS UNDER THIS LINE...
+    textSize(48);
+    fill(#FFFFFF);
+    text("Olympus Health", width/2, 30);
+    text(gTime, width/2, height-60);
+    olympusHealthBar.draw();
+    if (chestGUI != null) chestGUI.draw();
   }
 }

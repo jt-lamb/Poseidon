@@ -21,7 +21,7 @@ class SceneTitle {
     fill(255);
     textSize(48);
     textAlign(CENTER, CENTER);
-    text("Tiny Poseidon", width/2, height/3);
+    text("Poseidon", width/2, height/3);
   }
   void mousePressed() {
   }

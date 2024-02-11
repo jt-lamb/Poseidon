@@ -1,9 +1,18 @@
-// This program plays a mouse-based arcade game.
+// This program is a mouse-based arcade game.
 // Copyright 2024 John Thomas Lamb
-// [Rules and controls go here]
-// LEFT CLICK -
-// RIGHT CLICK -
-// MIDDLE MOUSE -
+//
+// Music "Aquarium" Kevin MacLeod (incompetech.com)
+// Licensed under Creative Commons: By Attribution 4.0 License http://creativecommons.org/licenses/by/4.0/
+//
+// ==Rules==
+// Defend Olympus from the invading army!
+// If enough ships get through or you run out of health, the game ends.
+// The game gets increasingly difficult over time, but enemies will drop items to help you get more powerful.
+//
+// ==Controls==
+// Player moves towards cursor
+// LEFT CLICK - Summon Whirlpool
+// RIGHT CLICK - Sprint
 
 import processing.sound.*;
 
@@ -21,6 +30,7 @@ SoundFile explosion;
 SoundFile music;
 SoundFile chest;
 SoundFile enemyPass;
+PFont font;
 
 void setup() {
   size(1280, 720);
@@ -31,6 +41,8 @@ void setup() {
   music = new SoundFile(this, "aquarium.wav");
   chest = new SoundFile(this, "chest.wav");
   enemyPass = new SoundFile(this, "enemypass.wav");
+  font = createFont("moderndos.ttf", 128);
+  textFont(font);
 }
 
 

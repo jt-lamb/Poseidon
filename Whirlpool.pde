@@ -7,7 +7,7 @@ class Whirlpool extends RadialObject {
 
   Whirlpool(float x, float y) {
     position = new PVector(x, y);
-    radius = 50;
+    radius = 20;
     for (int i = 0; i < animation.length; i++) animation[i] = loadImage("whirlpool" + (i+1) + ".png");
   }
 
@@ -17,6 +17,7 @@ class Whirlpool extends RadialObject {
       animCounter++;
       if (animCounter >= 5) {
         animIndex++;
+        if (animIndex >= 4) radius = 50;
         if (animIndex >= 6) {
           for (int i = 0; i < 20; i++) {
             float pAngle = radians(random(0, 360));
