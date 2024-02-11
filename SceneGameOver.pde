@@ -13,6 +13,8 @@ class SceneGameOver {
     textAlign(LEFT, TOP);
     text("Click to return to the main menu", 10, 20);
     textAlign(CENTER, CENTER);
+    textSize(48);
+    fill(#FFFFFF);
     text("GAME OVER", width/2, height/2);
   }
 }

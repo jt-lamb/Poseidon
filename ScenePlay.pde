@@ -12,7 +12,12 @@ class ScenePlay {
   ArrayList<PowerUp> powerUps = new ArrayList();
   ArrayList<Bomb> bombs = new ArrayList();
   ArrayList<Harpoon> harpoons = new ArrayList();
+  
+  //Time
   float enemySpawnCD = 2;
+  float enemySpawnRate = 1;
+  float spawnRateIncreaseCD = 60;
+
 
   float gameTime = 0;
   int gTime = 0;
@@ -42,7 +47,7 @@ class ScenePlay {
     if (enemySpawnCD <= 0) {
       Enemy e = new Enemy();
       enemies.add(e);
-      enemySpawnCD = random(0.5, 1);
+      enemySpawnCD = random(1, 3);
     }
 
     // UPDATE ALL OBJECTS UNDER THIS LINE...
@@ -73,6 +78,7 @@ class ScenePlay {
       p.update();
 
       if (p.checkCollision(player)) p.isDead = true;
+      if (p.position.y > height) powerUps.remove(i);
 
       if (p.isDead) {
         p.effect();
@@ -171,8 +177,7 @@ class ScenePlay {
 
 
     player.update();
-    
-    
+    if (player.health <=0) switchToGameOver();
   }
 
   void draw() {
@@ -181,10 +186,7 @@ class ScenePlay {
       Whirlpool w = whirlpools.get(i);
       w.draw();
     }
-    for (int i = 0; i < enemies.size(); i++) {
-      Enemy e = enemies.get(i);
-      e.draw();
-    }
+
     for (int i = 0; i < powerUps.size(); i++) {
       PowerUp p = powerUps.get(i);
       p.draw();
@@ -204,6 +206,10 @@ class ScenePlay {
     for (int i = 0; i < particles.size(); i++) {
       Particle pa = particles.get(i);
       pa.draw();
+    }
+    for (int i = 0; i < enemies.size(); i++) {
+      Enemy e = enemies.get(i);
+      e.draw();
     }
 
     player.draw();

@@ -24,7 +24,7 @@ class Whirlpool extends RadialObject {
             scenePlay.particles.add(p);
             p.velocity.x = 150;
             p.velocity.y = 150;
-            p.angle = random(0, 360);
+            p.angle = radians(random(0, 360));
             p.size = 5;
             p.r = 220;
             p.g = 240;
